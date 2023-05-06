@@ -1,0 +1,304 @@
+<mat-card class="tarjeta-fondo">
+  <mat-card class="example-card" style="width: 500px; height: 600px;">
+    <mat-card-content>
+      <table style="width: 100%;">
+        <tr>
+          <td style="font-size: 15px;">
+            <span class="badge badge-primary">OT: {{ ot_seleccionada }}</span>
+          </td>
+          <td style="font-size: 15px;">
+            <div
+              *ngIf="
+                (fecha_inicio_real | date: 'yyyy') !==
+                  (fecha_inicio_no_iniciado | date: 'yyyy');
+                then Real;
+                else Plan
+              "
+            ></div>
+            <ng-template #Real>
+              <span class="badge badge-primary"
+                >Fecha: {{ fecha_inicio_real | date: "yyyy-MM-dd" }}</span
+              >
+            </ng-template>
+            <ng-template #Plan>
+              <span class="badge badge-primary"
+                >Fecha:
+                {{ data.fecha_inicio_plan | date: "yyyy-MM-dd":"+0400" }}</span
+              >
+            </ng-template>
+          </td>
+          <!--  <td rowspan="5">
+            Duracion  {{data.fecha_inicio_real  | date:'yyyy'}}
+            </td> -->
+        </tr>
+        <tr>
+          <td style="font-size: 10px;">{{ CodUsuario }}</td>
+          <td style="font-size: 10px;">{{ telefono_contacto }}</td>
+        </tr>
+        <tr>
+          <td style="font-size: 10px;">{{ cliente }}</td>
+          <td style="font-size: 10px;">{{ phone_office }}</td>
+        </tr>
+        <tr>
+          <td style="font-size: 10px;">{{ billing_address_street }}</td>
+          <td style="font-size: 10px;">{{ zona_instalacion }}</td>
+        </tr>
+        <tr>
+          <td style="font-size: 10px;">{{ tiposinstalaciones }}</td>
+          <td style="font-size: 15;">
+            <div *ngIf="Estado == 'Nuevo'; then Nuevo"></div>
+            <ng-template #Nuevo>
+              <span class="badge badge-secondary">
+                {{ Estado }}
+              </span>
+              <span
+                matTooltip="{{ description }}"
+                class="badge badge-pill badge-primary"
+                >i</span
+              >
+            </ng-template>
+            <div *ngIf="Estado == 'En Progreso'; then EnProgreso"></div>
+            <ng-template #EnProgreso>
+              <span class="badge badge-warning">
+                {{ Estado }}
+              </span>
+              <span
+                matTooltip="{{ description }}"
+                class="badge badge-pill badge-primary"
+                >i</span
+              >
+            </ng-template>
+            <div *ngIf="Estado == 'Finalizado'; then Finalizado"></div>
+            <ng-template #Finalizado>
+              <span class="badge badge-success">
+                {{ Estado }}
+              </span>
+              <span
+                matTooltip="{{ description }}"
+                class="badge badge-pill badge-primary"
+                >i</span
+              >
+            </ng-template>
+            <div *ngIf="Estado == 'Cancelado'; then Cancelado"></div>
+            <ng-template #Cancelado>
+              <span class="badge badge-danger">
+                {{ Estado }}
+              </span>
+              <span
+                matTooltip="{{ description }}"
+                class="badge badge-pill badge-primary"
+                >i</span
+              >
+            </ng-template>
+          </td>
+        </tr>
+        <tr>
+          <td style="font-size: 15px;">
+            <span class="badge badge-primary"> Tareas Asignadas</span>
+          </td>
+        </tr>
+        <ng-container *ngFor="let tarea of TareasPorVisitas; let i = index">
+          <div
+            *ngIf="tarea.VisitaID == data.VisitaID; then TareasVisitas"
+          ></div>
+          <ng-template #TareasVisitas>
+            <div *ngIf="tarea.tipotarea_c == '03'; then Mantenimiento"></div>
+            <ng-template #Mantenimiento>
+              <tr>
+                <td>
+                  Mantenimiento
+                </td>
+                <td>
+                  <div
+                    *ngIf="
+                      (tarea.fecha_inicio_real_c | date: 'yyyy') !==
+                        (fecha_inicio_no_iniciado | date: 'yyyy');
+                      then Iniciado;
+                      else NoIniciado
+                    "
+                  ></div>
+                  <ng-template #Iniciado>
+                    <div
+                      *ngIf="
+                        (tarea.fecha_fin_real_c | date: 'yyyy') !==
+                          (fecha_final_no_iniciado | date: 'yyyy');
+                        then Finalizado;
+                        else NoFinalizado
+                      "
+                    ></div>
+                    <ng-template #Finalizado>
+                      <span
+                        matTooltip="{{ tarea.status }}"
+                        class="badge badge-success"
+                        >OBS</span
+                      >
+                      <span
+                        matTooltip="{{ tarea.description }}"
+                        class="badge badge-pill badge-primary"
+                        >i</span
+                      >
+                    </ng-template>
+                    <ng-template #NoFinalizado>
+                      <span
+                        matTooltip="{{ tarea.status }}"
+                        class="badge badge-warning"
+                        >OBS</span
+                      >
+                      <span
+                        matTooltip="{{ tarea.description }}"
+                        class="badge badge-pill badge-primary"
+                        >i</span
+                      >
+                    </ng-template>
+                  </ng-template>
+                  <ng-template #NoIniciado>
+                    <span
+                      matTooltip="{{ tarea.status }}"
+                      class="badge badge-secondary"
+                      >OBS</span
+                    >
+                    <span
+                      matTooltip="{{ tarea.description }}"
+                      class="badge badge-pill badge-primary"
+                      >i</span
+                    >
+                  </ng-template>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Solicitud:
+                  {{ fecha_inicio_plan | date: "HH:mm":"+0000" }}
+                </td>
+                <td>
+                  Respuesta: {{ fecha_final_plan | date: "HH:mm":"+0000" }}
+                </td>
+                <td>
+                  Sitio: {{ fecha_inicio_real | date: "HH:mm":"+0000" }}
+                </td>
+                <td>
+                  Reparación:
+                  {{ fecha_final_real | date: "HH:mm":"+0000" }}
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </ng-container>
+      </table>
+      <mat-tab-group>
+        <!-- <mat-tab label="Documentos">
+            <table width='100%'>
+              <ng-container *ngFor="let foto of FotosPorVisitas; let i=index">
+                <div *ngIf="foto.tipo_foto_c == '02';then Documentos">
+                </div>
+                <ng-template #Documentos>
+                  <div *ngIf="foto.tipo_documento_c == '0';then Otros">
+                  </div>
+                  <ng-template #Otros>
+                    <tr>
+                      <td>
+                        <p>Otros</p>
+                      </td>
+                      <td>
+                        <p>{{foto.description}}</p>
+                      </td>
+                      <td>
+                        <mat-icon (click)="open1(content1);CargarImagenDocumento(foto.name);">wallpaper</mat-icon>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <div *ngIf="foto.tipo_documento_c == '1';then OT">
+                  </div>
+                  <ng-template #OT>
+                    <tr>
+                      <td>
+                        <p>OT</p>
+                      </td>
+                      <td>
+                        <p>{{foto.description}}</p>
+                      </td>
+                      <td>
+                        <mat-icon (click)="open1(content1);CargarImagenDocumento(foto.name);">assignment</mat-icon>
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <div *ngIf="foto.tipo_documento_c == '2';then Formulario">
+                  </div>
+                  <ng-template #Formulario>
+                    <tr>
+                      <td>
+                        <p>Formulario</p>
+                      </td>
+                      <td>
+                        <p>{{foto.description}}</p>
+                      </td>
+                      <td>
+                        <mat-icon (click)="open1(content1);CargarImagenDocumento(foto.name);">description</mat-icon>
+                      </td>
+                    </tr>
+                  </ng-template>
+                 </ng-template>
+              </ng-container>
+            </table>
+        </mat-tab> -->
+
+        <ng-container *ngFor="let tarea of TareasPorVisitas; let i = index">
+          <div *ngIf="tarea.tipotarea_c == '03'; then Mantenimiento"></div>
+          <ng-template #Mantenimiento>
+            <mat-tab label="Mantenimiento">
+              <ngb-carousel *ngIf="FotosPorVisitas">
+                <ng-container
+                  *ngFor="let foto of FotosPorVisitas; let i = index"
+                >
+                  <div
+                    *ngIf="
+                      foto.tipotarea_c == '03' && foto.tipo_foto_c == '01';
+                      then Instalacion
+                    "
+                  ></div>
+                  <ng-template #Instalacion>
+                    <ng-template ngbSlide>
+                      <div class="picsum-img-wrapper">
+                        <div class="imagepopup">
+                          <img
+                            src="{{ url }}/upload/{{ foto.name }}"
+                            alt="Random first slide"
+                          />
+                        </div>
+                      </div>
+                      <div class="carousel-caption">
+                        <p>{{ foto.description }}</p>
+                      </div>
+                    </ng-template>
+                  </ng-template>
+                </ng-container>
+              </ngb-carousel>
+            </mat-tab>
+          </ng-template>
+        </ng-container>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</mat-card>
+
+<ng-template #content1 let-modal>
+  <div class="modal-body">
+    <img src="{{ url }}/upload/{{ ImagenDocumento }}" />
+  </div>
+  <div class="modal-footer">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="modal.close('Save click')"
+    >
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<!-- Inspección -> Mant. SURentivo
+Instalación -> Mant. IMPLectivo
+
+
+Inspección -> PREV
+Instalación -> CORR -->

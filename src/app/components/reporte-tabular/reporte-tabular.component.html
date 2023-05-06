@@ -1,0 +1,177 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-subtitle>
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field class="full-width">
+            <mat-label>Proyecto</mat-label>
+            <mat-select
+              [disabled]="false"
+              [(ngModel)]="proyecto_seleccionado"
+              (selectionChange)="SeleccionarProyecto($event)"
+              (click)="$event.stopPropagation()"
+            >
+              <mat-option
+                *ngFor="let proyecto of ProyectosList"
+                [value]="proyecto.id"
+              >
+                {{ proyecto.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="full-width">
+            <mat-label>Instalaciones</mat-label>
+            <mat-select
+              (click)="$event.stopPropagation()"
+              (selectionChange)="SeleccionarInstalacion($event)"
+              [value]="instalacion_seleccionada"
+            >
+              <mat-option
+                *ngFor="let instalacion of InstalacionesList"
+                [value]="instalacion.id"
+              >
+                {{ instalacion.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="full-width">
+            <mat-label>Tipo de OT</mat-label>
+            <mat-select
+              [disabled]="false"
+              (selectionChange)="SeleccionarTipoOT($event)"
+              (click)="$event.stopPropagation()"
+              [value]="tipoot_seleccionada"
+            >
+              <mat-option [value]="'Todos'">
+                Todos
+              </mat-option>
+              <mat-option [value]="'01'">
+                Instalaciones
+              </mat-option>
+              <mat-option [value]="'02'">
+                Mantenimiento
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-label>Fecha Visita</mat-label>
+          <mat-form-field>
+            <input
+              #currentdate
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="FechaActual"
+              (dateChange)="SeleccionarFecha($event)"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <mat-datepicker-toggle matSuffix [for]="picker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <table mat-table [dataSource]="dataSource" matSort width="100%">
+    <ng-container matColumnDef="VisitaID">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>VisitaID</th>
+      <td mat-cell *matCellDef="let element">{{ element.VisitaID }}</td>
+    </ng-container>
+    <ng-container matColumnDef="CodUsuario">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>CodUsuario</th>
+      <td mat-cell *matCellDef="let element">{{ element.CodUsuario }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Cuadrilla">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuadrilla</th>
+      <td mat-cell *matCellDef="let element">{{ element.Cuadrilla }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Estado">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+      <td mat-cell *matCellDef="let element">{{ element.Estado }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Instalacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Instalacion</th>
+      <td mat-cell *matCellDef="let element">{{ element.Instalacion }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="MotivoVisita">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>MotivoVisita</th>
+      <td mat-cell *matCellDef="let element">{{ element.MotivoVisita }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Ot">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ot</th>
+      <td mat-cell *matCellDef="let element">{{ element.Ot }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="TipoOt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>TipoOt</th>
+      <td mat-cell *matCellDef="let element">{{ element.TipoOt }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cliente">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>cliente</th>
+      <td mat-cell *matCellDef="let element">{{ element.cliente }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_final_plan">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        fecha_final_plan
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fecha_final_plan | date: "dd/MM/yyyy HH:mm:ss":"UTC" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_final_real">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        fecha_final_real
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fecha_final_real | date: "dd/MM/yyyy HH:mm:ss":"UTC" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_inicio_plan">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        fecha_inicio_plan
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fecha_inicio_plan | date: "dd/MM/yyyy HH:mm:ss":"UTC" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_inicio_real">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        fecha_inicio_real
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fecha_inicio_real | date: "dd/MM/yyyy HH:mm:ss":"UTC" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tiposinstalaciones">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        tiposinstalaciones
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.tiposinstalaciones }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 20, 30]"></mat-paginator>
+</mat-card>

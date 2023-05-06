@@ -1,0 +1,44 @@
+[
+    {
+        "NombreItem": "Dieléctrico",
+        "Cantidad": "50",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    },
+    {
+        "NombreItem": "Item2",
+        "Cantidad": "150",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    },
+    {
+        "NombreItem": "Item3",
+        "Cantidad": "70",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    },
+    {
+        "NombreItem": "Item4",
+        "Cantidad": "200",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    },
+    {
+        "NombreItem": "Item5",
+        "Cantidad": "180",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    },
+    {
+        "NombreItem": "Item6",
+        "Cantidad": "30",
+        "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+        "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+        "Fecha":"2021-09-10 00:00:00"
+    }
+]

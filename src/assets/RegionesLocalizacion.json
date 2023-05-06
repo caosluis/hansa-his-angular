@@ -1,0 +1,86 @@
+[
+    {
+        "Region": "La Paz",
+        "RegionID": "01_01",
+        "Latitud": "-16.4897",
+        "Longitud": "-68.1193"
+    },
+    {
+        "Region": "Santa Cruz",
+        "RegionID": "02_02",
+        "Latitud": "-17.8146",
+        "Longitud": "-63.1561"
+    },
+    {
+        "Region": "Cochabamba",
+        "RegionID": "03_03",
+        "Latitud": "-17.414",
+        "Longitud": "-66.1653"
+    },
+    {
+        "Region": "Tarija",
+        "RegionID": "04_04",
+        "Latitud": "-21.9996978",
+        "Longitud": "-63.7353929"
+    },
+    {
+        "Region": "Chuquisaca",
+        "RegionID": "06_06",
+        "Latitud": "-19.0204749",
+        "Longitud": "-65.3298331"
+    },
+    {
+        "Region": "Potosí",
+        "RegionID": "01_07",
+        "Latitud": "-19.5979162",
+        "Longitud": "-65.8022973"
+    },
+    {
+        "Region": "Oruro",
+        "RegionID": "07_09",
+        "Latitud": "-17.98333",
+        "Longitud": "-67.15"
+    },
+    {
+        "Region": "COV/CAG/VILL",
+        "RegionID": "20_01",
+        "Latitud": "-25.77",
+        "Longitud": "-56.4316"
+    },
+    {
+        "Region": "CED",
+        "RegionID": "20_02",
+        "Latitud": "-25.512874",
+        "Longitud": "-54.612229"
+    },
+    {
+        "Region": "ASU",
+        "RegionID": "20_03",
+        "Latitud": "-27.3512",
+        "Longitud": "-55.8203"
+    },
+    {
+        "Region": "ENC",
+        "RegionID": "20_04",
+        "Latitud": "-25.2819",
+        "Longitud": "-57.635"
+    },
+    {
+        "Region": "CON",
+        "RegionID": "20_06",
+        "Latitud": "-23.3998500",
+        "Longitud": "-57.4323600"
+    },
+    {
+        "Region": "LOMAS DE PADIERNA",
+        "RegionID": "41_01",
+        "Latitud": "19.29239",
+        "Longitud": "-99.22326"
+    },
+    {
+        "Region": "CHILE",
+        "RegionID": "60_01",
+        "Latitud": "-33.45694",
+        "Longitud": "-70.64827"
+    }
+]

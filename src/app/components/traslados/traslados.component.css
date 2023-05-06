@@ -1,0 +1,12 @@
+.reporteTabular {
+    width: 100%;
+    height: 70vh;
+  }
+  .th {
+    font-size: xx-small;
+    text-align: center !important;
+  }
+  .td {
+    font-size: xx-small !important;
+    text-align: center !important;
+  }

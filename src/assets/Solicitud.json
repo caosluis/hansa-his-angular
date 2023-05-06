@@ -1,0 +1,25 @@
+[{
+    "SolicitudID": "1",
+    "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+    "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+    "CodUsuario": "creyes",
+    "FechaSolicitud":"2021-09-10 00:00:00",
+    "Observaciones":"Solicitud Urgente",
+    "Estado":"Enviado"
+},{
+    "SolicitudID": "2",
+    "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+    "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+    "CodUsuario": "creyes",
+    "FechaSolicitud":"2021-09-10 00:00:00",
+    "Observaciones":"Necesito Materiales",
+    "Estado":"Rechazado"
+},{
+    "SolicitudID": "3",
+    "InstalacionID": "ee645de4-0730-af3e-2f71-613a5b9db84c",
+    "ProyectoID": "3c7bca09-14ff-cbfd-9c8b-5fa1c9ad59e1",
+    "CodUsuario": "creyes",
+    "FechaSolicitud":"2021-09-10 00:00:00",
+    "Observaciones":"Favor contemplar Solicitud",
+    "Estado":"Aprobado"
+}]

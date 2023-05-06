@@ -1,0 +1,1373 @@
+<!-- 
+<mat-tab-group>
+  <mat-tab label="Mapa">
+    
+  </mat-tab>
+  <mat-tab label="Reporte">
+    
+  </mat-tab>
+</mat-tab-group> -->
+
+<div id="MapVisitasComponent">
+  <mat-toolbar color="primary">
+    <button mat-raised-button color="primary" [matMenuTriggerFor]="Filtros">
+      Filtros
+    </button>
+
+    <button mat-raised-button color="primary"
+      onclick=" window.open('https://crm.hansa.com.bo/index.php?module=HANIN_OrdenesTrabajo&action=asignaciones','_blank')">
+      Asignaciones
+    </button>
+
+    <button mat-raised-button color="primary"
+      onclick=" window.open('http://crm.hansa.com.bo/index.php?module=HANIN_OrdenesTrabajo&action=incidente','_blank')">
+      Registrar Incidente
+    </button>
+
+    <button mat-icon-button (click)="sidenav1.toggle()">
+      <mat-icon>view_quilt</mat-icon>
+    </button>
+
+    <!-- <button
+      mat-icon-button
+      matBadge="1"
+      matBadgePosition="before"
+      matBadgeColor="warn"
+      [matMenuTriggerFor]="Opciones"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button> -->
+
+    <!-- <button mat-icon-button (click)="DetalleInventario()">
+      <mat-icon>home</mat-icon>
+    </button> -->
+  </mat-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav1 opened mode="side" class="sidebar_izq">
+      <div style="border: 1px solid #cfd8dc;">
+        <mat-list role="list">
+          <mat-accordion>
+            <ng-container *ngFor="let Cuadrilla of cuadrillas">
+              <mat-expansion-panel class="panel-cuadrilla">
+                <mat-expansion-panel-header expandedHeight="80px" collapsedHeight="80px">
+                  <!-- <div class="row">
+                    <div class="col-md-12">
+                      {{ Cuadrilla.user_name }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">{{ Cuadrilla.name }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      VIS
+                      {{ CantidadPorTecnicoTotal(Cuadrilla.TecnicoID) }}/{{
+                        CantidadPorTecnicoParcial(Cuadrilla.TecnicoID)
+                      }}
+                    </div>
+                  </div> -->
+
+                  <ol class="ol-vendedor">
+                    <li class="nostyle">
+                      <div>
+
+                        <div class="vendedor_card">
+                          {{ Cuadrilla.user_name }}/{{ Cuadrilla.name }}
+                        </div>
+
+                        <span class="badge badge-primary">
+                          VIS
+                          {{
+                          MostrarContadorFinalizadas(Cuadrilla.user_name) || "0"
+                          }}/{{
+                          MostrarContador(Cuadrilla.user_name) || "0"
+                          }}
+                        </span>
+
+                      </div>
+                    </li>
+                  </ol>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent #mostrar>
+                  <ol class="timeline">
+                    <ng-container *ngFor="let visita of visitas; let i = index">
+                      <div *ngIf="
+                          visita.assigned_user_id == Cuadrilla.TecnicoID;
+                          then VisitasDelUsuario
+                        "></div>
+                      <ng-template #VisitasDelUsuario>
+                        <li>
+                          <!-- <div class="card bg-light mb-3" style="max-width: 18rem;"> -->
+                          <!-- <div class="card-header" style="padding: 1px 10px;"> -->
+                          <div class="card-body" style="padding: 5px;">
+                            <!-- {{visita.FechaInicioReal | date:'HH:mm':'-0400'}} -->
+                            <div *ngIf="visita.Estado == 'Nuevo'; then Nuevo"></div>
+                            <ng-template #Nuevo>
+                              <div class="card mb-3 card_nuevo" style="max-width: 18rem;">
+                                <table>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      <button type="button" class="btn btn-primary btn-xs" (click)="
+                                          SeleccionarMarker(visita.VisitaID)
+                                        ">
+                                        {{ visita.Ot }}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.cliente }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.billing_address_street }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.tiposinstalaciones }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.zona_instalacion }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.telefono_contacto }}
+                                    </td>
+                                    <td>
+                                      <ng-container *ngFor="let tarea of tareas">
+                                        <div *ngIf="
+                                            visita.VisitaID == tarea.VisitaID;
+                                            then Tarea
+                                          "></div>
+                                        <ng-template #Tarea>
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '01';
+                                              then TipoTarea01
+                                            "></div>
+                                          <ng-template #TipoTarea01>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INSP</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INSP</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INSP</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '02';
+                                              then TipoTarea02
+                                            "></div>
+                                          <ng-template #TipoTarea02>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INST</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INST</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INST</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '03';
+                                              then TipoTarea03
+                                            "></div>
+                                          <ng-template #TipoTarea03>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">MAN</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">MAN</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">MAN</span>
+                                            </ng-template>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-container>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </ng-template>
+                            <div *ngIf="
+                                visita.Estado == 'En Camino';
+                                then EnCamino
+                              "></div>
+                            <ng-template #EnCamino>
+                              <div class="card mb-3 card_encamino" style="max-width: 18rem;">
+                                <!-- <button type="button"
+                                                                        class="btn btn-secondary btn-estado btn-sm"
+                                                                        (click)="SeleccionarMarker(visita)">
+                                                                        <span
+                                                                            style="font-size:smaller;">{{visita.Estado}}</span>
+                                                                    </button> -->
+                                <table>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      <button type="button" class="btn btn-primary btn-xs" (click)="
+                                          SeleccionarMarker(visita.VisitaID)
+                                        ">
+                                        {{ visita.Ot }}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.cliente }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.billing_address_street }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.tiposinstalaciones }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.zona_instalacion }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.telefono_contacto }}
+                                    </td>
+                                    <td>
+                                      <ng-container *ngFor="let tarea of tareas">
+                                        <div *ngIf="
+                                            visita.VisitaID == tarea.VisitaID;
+                                            then Tarea
+                                          "></div>
+                                        <ng-template #Tarea>
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '01';
+                                              then TipoTarea01
+                                            "></div>
+                                          <ng-template #TipoTarea01>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INSP</span>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INSP</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INSP</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '02';
+                                              then TipoTarea02
+                                            "></div>
+                                          <ng-template #TipoTarea02>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INST</span>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INST</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INST</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '03';
+                                              then TipoTarea03
+                                            "></div>
+                                          <ng-template #TipoTarea03>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">MAN</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">MAN</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">MAN</span>
+                                            </ng-template>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-container>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </ng-template>
+                            <div *ngIf="
+                                visita.Estado == 'En Progreso';
+                                then EnProgreso
+                              "></div>
+                            <ng-template #EnProgreso>
+                              <div class="card mb-3 card_enprogreso" style="max-width: 18rem;">
+                                <!-- <button type="button"
+                                                                        class="btn btn-success btn-estado btn-sm"
+                                                                        (click)="SeleccionarMarker(visita)">
+                                                                        <span
+                                                                            style="font-size:smaller;">{{visita.Estado}}</span>
+                                                                    </button> -->
+                                <table>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      <button type="button" class="btn btn-primary btn-xs" (click)="
+                                          SeleccionarMarker(visita.VisitaID)
+                                        ">
+                                        {{ visita.Ot }}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.cliente }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.billing_address_street }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.tiposinstalaciones }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.zona_instalacion }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.telefono_contacto }}
+                                    </td>
+                                    <td>
+                                      <ng-container *ngFor="let tarea of tareas">
+                                        <div *ngIf="
+                                            visita.VisitaID == tarea.VisitaID;
+                                            then Tarea
+                                          "></div>
+                                        <ng-template #Tarea>
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '01';
+                                              then TipoTarea01
+                                            "></div>
+                                          <ng-template #TipoTarea01>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INSP</span>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INSP</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INSP</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '02';
+                                              then TipoTarea02
+                                            "></div>
+                                          <ng-template #TipoTarea02>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INST</span>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INST</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INST</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '03';
+                                              then TipoTarea03
+                                            "></div>
+                                          <ng-template #TipoTarea03>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">MAN</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">MAN</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">MAN</span>
+                                            </ng-template>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-container>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </ng-template>
+                            <div *ngIf="
+                                visita.Estado == 'Cancelado';
+                                then Cancelado
+                              "></div>
+                            <ng-template #Cancelado>
+                              <div class="card mb-3 card_cancelado" style="max-width: 18rem;">
+                                <!-- <button type="button"
+                                                                        class="btn btn-secondary btn-estado btn-sm"
+                                                                        (click)="SeleccionarMarker(visita)">
+                                                                        <span
+                                                                            style="font-size:smaller;">{{visita.Estado}}</span>
+                                                                    </button> -->
+                                <table>
+                                  <tr>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      <button type="button" class="btn btn-primary btn-xs" (click)="
+                                          SeleccionarMarker(visita.VisitaID)
+                                        ">
+                                        {{ visita.Ot }}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      {{ visita.cliente }}
+                                    </td>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      {{ visita.billing_address_street }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      {{ visita.tiposinstalaciones }}
+                                    </td>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      {{ visita.zona_instalacion }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px; color: #ffffff;">
+                                      {{ visita.telefono_contacto }}
+                                    </td>
+                                    <td>
+                                      <ng-container *ngFor="let tarea of tareas">
+                                        <div *ngIf="
+                                            visita.VisitaID == tarea.VisitaID;
+                                            then Tarea
+                                          "></div>
+                                        <ng-template #Tarea>
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '01';
+                                              then TipoTarea01
+                                            "></div>
+                                          <ng-template #TipoTarea01>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <div *ngIf="
+                                                    tarea.status ==
+                                                      'No Factible';
+                                                    then NoFactible;
+                                                    else Factible
+                                                  "></div>
+                                                <ng-template #NoFactible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-danger">INSP</span>
+                                                </ng-template>
+                                                <ng-template #Factible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-success">INSP</span>
+                                                </ng-template>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INSP</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INSP</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '02';
+                                              then TipoTarea02
+                                            "></div>
+                                          <ng-template #TipoTarea02>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <div *ngIf="
+                                                    tarea.status ==
+                                                      'No Factible';
+                                                    then NoFactible;
+                                                    else Factible
+                                                  "></div>
+
+                                                <ng-template #NoFactible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-danger">INST</span>
+                                                </ng-template>
+                                                <ng-template #Factible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-success">INST</span>
+                                                </ng-template>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INST</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INST</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '03';
+                                              then TipoTarea03
+                                            "></div>
+                                          <ng-template #TipoTarea03>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">MAN</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">MAN</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">MAN</span>
+                                            </ng-template>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-container>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </ng-template>
+                            <div *ngIf="
+                                visita.Estado == 'Finalizado';
+                                then Finalizado
+                              "></div>
+                            <ng-template #Finalizado>
+                              <div class="card mb-3 card_finalizado" style="max-width: 18rem;">
+                                <!-- <button type="button"
+                                                                        class="btn btn-info btn-estado btn-sm"
+                                                                        (click)="SeleccionarMarker(visita)">
+                                                                        <span
+                                                                            style="font-size:smaller;">{{visita.Estado}}</span>
+                                                                    </button> -->
+                                <table>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      <button type="button" class="btn btn-primary btn-xs" (click)="
+                                          SeleccionarMarker(visita.VisitaID)
+                                        ">
+                                        {{ visita.Ot }}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.cliente }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.billing_address_street }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.tiposinstalaciones }}
+                                    </td>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.zona_instalacion }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="font-size: 10px;">
+                                      {{ visita.telefono_contacto }}
+                                    </td>
+                                    <td>
+                                      <ng-container *ngFor="let tarea of tareas">
+                                        <div *ngIf="
+                                            visita.VisitaID == tarea.VisitaID;
+                                            then Tarea
+                                          "></div>
+                                        <ng-template #Tarea>
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '01';
+                                              then TipoTarea01
+                                            "></div>
+                                          <ng-template #TipoTarea01>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <div *ngIf="
+                                                    tarea.status ==
+                                                      'No Factible';
+                                                    then NoFactible;
+                                                    else Factible
+                                                  "></div>
+                                                <ng-template #NoFactible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-danger">INSP</span>
+                                                </ng-template>
+                                                <ng-template #Factible>
+                                                  <span matTooltip="{{
+                                                      tarea.status
+                                                    }}" class="badge badge-success">INSP</span>
+                                                </ng-template>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INSP</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INSP</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '02';
+                                              then TipoTarea02
+                                            "></div>
+                                          <ng-template #TipoTarea02>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">INST</span>
+                                              </ng-template>
+
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">INST</span>
+                                              </ng-template>
+                                            </ng-template>
+
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">INST</span>
+                                            </ng-template>
+                                          </ng-template>
+
+                                          <div *ngIf="
+                                              tarea.tipotarea_c == '03';
+                                              then TipoTarea03
+                                            "></div>
+                                          <ng-template #TipoTarea03>
+                                            <div *ngIf="
+                                                (tarea.fecha_inicio_real_c
+                                                  | date: 'yyyy') !==
+                                                  (fecha_inicio_no_iniciado
+                                                    | date: 'yyyy');
+                                                then Iniciado;
+                                                else NoIniciado
+                                              "></div>
+                                            <ng-template #Iniciado>
+                                              <div *ngIf="
+                                                  (tarea.fecha_fin_real_c
+                                                    | date: 'yyyy') !==
+                                                    (fecha_final_no_iniciado
+                                                      | date: 'yyyy');
+                                                  then Finalizado;
+                                                  else NoFinalizado
+                                                "></div>
+                                              <ng-template #Finalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-success">MAN</span>
+                                              </ng-template>
+                                              <ng-template #NoFinalizado>
+                                                <span matTooltip="{{
+                                                    tarea.status
+                                                  }}" class="badge badge-warning">MAN</span>
+                                              </ng-template>
+                                            </ng-template>
+                                            <ng-template #NoIniciado>
+                                              <span matTooltip="{{ tarea.status }}"
+                                                class="badge badge-secondary">MAN</span>
+                                            </ng-template>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-container>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </ng-template>
+                            <!-- </div> -->
+                            <!-- <div class="card-body" style="padding: 5px;">
+                                                                <p class="card-title" style="font-size:10px;">
+                                                                    {{visita.Nombre}}
+                                                                </p>
+                                                            </div> -->
+                          </div>
+                        </li>
+                      </ng-template>
+                    </ng-container>
+                  </ol>
+                </ng-template>
+                <button type="button" class="btn btn-primary btn-xs" (click)="
+                    $event.stopPropagation();
+                    timeline.toggle();
+                    CargarLineaDeTiempo(Cuadrilla)
+                  ">
+                  Ver Línea de Tiempo
+                </button>
+                <!-- <ng-template matExpansionPanelContent #nomostrar>
+                                        <div>Sin Visitas</div>
+                                    </ng-template> -->
+              </mat-expansion-panel>
+            </ng-container>
+          </mat-accordion>
+        </mat-list>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Mapa">
+          <div id="VistaMapa">
+            <!-- <div class="floating_bar">
+                <mat-expansion-panel hideToggle="false" #timeline>
+                  <table width="100%">
+                    <div id="charttimeline"></div>
+                  </table>
+                </mat-expansion-panel>
+              </div> -->
+          </div>
+        </mat-tab>
+        <mat-tab label="Reporte">
+          <div class="contenedorTabular">
+            <table mat-table [dataSource]="dataSourceVisitas" matSort class="reporteTabular">
+              <ng-container matColumnDef="VisitaID">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  VisitaID
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.VisitaID }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="CodUsuario">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  CodUsuario
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.CodUsuario }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Cuadrilla">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Cuadrilla
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Cuadrilla }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Estado
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Estado }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Instalacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Instalacion
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Instalacion }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="MotivoVisita">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  MotivoVisita
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.MotivoVisita }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Ot">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ot</th>
+                <td mat-cell *matCellDef="let element">{{ element.Ot }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="TipoOt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  TipoOt
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.TipoOt }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  cliente
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.cliente }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha_final_plan">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  fecha_final_plan
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{
+                  element.fecha_final_plan | date: "dd/MM/yyyy HH:mm:ss":"UTC"
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha_final_real">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  fecha_final_real
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{
+                  element.fecha_final_real | date: "dd/MM/yyyy HH:mm:ss":"UTC"
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha_inicio_plan">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  fecha_inicio_plan
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{
+                  element.fecha_inicio_plan | date: "dd/MM/yyyy HH:mm:ss":"UTC"
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha_inicio_real">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  fecha_inicio_real
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{
+                  element.fecha_inicio_real | date: "dd/MM/yyyy HH:mm:ss":"UTC"
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="tiposinstalaciones">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  tiposinstalaciones
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.tiposinstalaciones }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="visitasColumns"></tr>
+              <tr mat-row *matRowDef="let element; columns: visitasColumns"></tr>
+            </table>
+
+            <input matInput placeholder="Buscar" autocomplete="off" (keyup)="FiltroBuscar($event.target.value)" />
+            <mat-paginator [pageSizeOptions]="[8, 16, 32]"></mat-paginator>
+          </div>
+        </mat-tab>
+        <mat-tab label="Incidentes" *ngIf="Visible(proyecto_seleccionado)">
+          <div class="contenedorIncidentes">
+            <div class="row">
+              <div class="col-sm-7">
+                <mat-card-header>
+                  <mat-card-title>Tickets Creados</mat-card-title>
+                </mat-card-header>
+              </div>
+              <div class="col-sm-5">
+                <ul class="nav justify-content-end menuboton">
+                  <li class="nav-item">
+                    <button mat-raised-button class="boton" color="primary" (click)="Cargartickets()">
+                      <mat-icon> refresh</mat-icon>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <table mat-table [dataSource]="dataSourceIncidentes" matSort class="reporteIncidentes">
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  OrdentrabajoID
+                </th>
+                <td mat-cell *matCellDef="let element" width='15%'>
+                  {{ element.id }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="CodUsuario">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  CodUsuario
+                </th>
+                <td mat-cell *matCellDef="let element" width='10%'>
+                  {{ UsuarioTicket(element.id) }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Orden de trabajo
+                </th>
+                <td mat-cell *matCellDef="let element" width='10%'>
+                  {{ element.name }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Orden de Trabajo
+                </th>
+                <td mat-cell *matCellDef="let element" width='50%'>
+                  {{ element.description }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="estado_c">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Estado
+                </th>
+                <td mat-cell *matCellDef="let element" width='15%'>
+                  <ng-container *ngIf="element.estado_c == 'Asignado';
+                  then vigente;
+                  else vencido
+                ">
+                  </ng-container>
+                  <ng-template #vigente>
+                    <span class="badge bg-success estado">
+                      {{ element.estado_c }}
+                    </span>
+                  </ng-template>
+                  <ng-template #vencido>
+                    <span class="badge bg-danger estado">
+                      {{ element.estado_c }}
+                    </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="incidentesColumns"></tr>
+              <tr mat-row *matRowDef="let element; columns: incidentesColumns"></tr>
+            </table>
+            <input matInput placeholder="Buscar" autocomplete="off" (keyup)="FiltroBuscar($event.target.value)" />
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<!-- <div>
+    <img class="imagen-insp" alt="img" id="img-imagen-insp" src="http://crm.hansa.com.bo/upload/7f47c103-f66f-adf3-0daa-5d85c9a48bcc_name.jpg" style="width: 100%;">
+</div> -->
+<mat-menu #Filtros="matMenu" (click)="$event.stopPropagation()">
+  <div style="margin: 20px;" (click)="$event.stopPropagation()">
+    <mat-form-field class="full-width">
+      <mat-label>Proyecto</mat-label>
+      <mat-select [disabled]="false" (selectionChange)="SeleccionarProyecto($event)" (click)="$event.stopPropagation()"
+        [value]="proyecto_seleccionado">
+        <mat-option *ngFor="let proyecto of ProyectosList" [value]="proyecto.id">
+          {{ proyecto.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Instalaciones</mat-label>
+      <mat-select (click)="$event.stopPropagation()" (selectionChange)="SeleccionarInstalacion($event)"
+        [value]="instalacion_seleccionada">
+        <mat-option *ngFor="let instalacion of InstalacionesList" [value]="instalacion.id">
+          {{ instalacion.name }} <span class="badge badge-primary">
+            {{ VisitasInstalacion(instalacion.id) || "0"}}
+          </span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Tipo de OT</mat-label>
+      <mat-select [disabled]="false" (selectionChange)="SeleccionarTipoOT($event)" (click)="$event.stopPropagation()"
+        [value]="tipoot_seleccionada">
+        <mat-option [value]="'Todos'">
+          Todos
+        </mat-option>
+        <mat-option [value]="'01'">
+          OOCC
+        </mat-option>
+        <mat-option [value]="'02'">
+          Energía
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Estado</mat-label>
+      <mat-select [disabled]="false" (selectionChange)="SeleccionarEstado($event)" (click)="$event.stopPropagation()"
+        [value]="EstadoSeleccionado">
+        <mat-option [value]="'Todos'">
+          Todos
+        </mat-option>
+        <mat-option [value]="'Finalizado'">
+          <img src="assets/images/Marcador-verde.png" class="marker-leyenda" />Finalizado
+        </mat-option>
+        <mat-option [value]="'Nuevo'">
+          <img src="assets/images/Marcador-gris.png" class="marker-leyenda" />Nuevo
+        </mat-option>
+        <mat-option [value]="'En Progreso'">
+          <img src="assets/images/Marcador-amarillo.png" class="marker-leyenda" />En Progreso
+        </mat-option>
+        <mat-option [value]="'Cancelado'">
+          <img src="assets/images/Marcador-rojo.png" class="marker-leyenda" />Cancelado
+        </mat-option>
+        <mat-option [value]="'En Camino'">
+          <img src="assets/images/Marcador-naranja.png" class="marker-leyenda" />En Camino
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input #currentdate matInput [matDatepicker]="picker" [(ngModel)]="FechaSeleccionada"
+        (dateChange)="SeleccionarFecha($event)" [ngModelOptions]="{ standalone: true }" />
+      <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</mat-menu>
+<mat-menu #Opciones="matMenu"><button mat-menu-item>
+    <span>Solicitud Material CReyes</span>
+  </button></mat-menu>

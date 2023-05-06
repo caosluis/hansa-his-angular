@@ -1,0 +1,186 @@
+<table>
+  <tr>
+    <td>
+      <form
+        [formGroup]="FiltroCategory"
+        style="margin: 20px;"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="start"
+              placeholder="Fecha Ini"
+              (dateChange)="SeleccionarFecha($event)"
+            />
+            <input
+              matEndDate
+              formControlName="end"
+              placeholder="Fecha Fin"
+              (dateChange)="SeleccionarFecha($event)"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field appearance="fill">
+          <mat-label>Region</mat-label>
+          <mat-select
+            formControlName="regionalCategory"
+            (selectionChange)="SeleccionarRegion($event)"
+          >
+            <mat-option
+              *ngFor="let region of FiltroRegionales"
+              [value]="region.RegionalID"
+            >
+              {{ region.Regional }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span>&nbsp;</span>
+        <mat-form-field appearance="fill">
+          <mat-label>Supervisor</mat-label>
+          <mat-select
+            formControlName="supervisorCategory"
+            (selectionChange)="SeleccionarSupervisor($event)"
+          >
+            <mat-option
+              *ngFor="let super of FiltroSupervisor"
+              [value]="super.id"
+            >
+              {{ super.name }}
+            </mat-option>
+            <mat-option [value]="'Todos'">
+              Todos
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </td>
+    <td>
+      <button mat-button color="primary" mat-dialog-close><mat-icon>close</mat-icon></button>
+    </td>
+  </tr>
+</table>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-lg-3">
+      <div class="panel panel-blue">
+        <div class="row">
+          <div class="col-md-4 align-self-center">
+            <span class="circulo">{{ OrdenesCompletadas }}</span>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-12"><h6>Órdenes Completadas</h6></div>
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-12">
+                {{ OrdenesCompletadasUltimos3 }} Prom. Últimos 3 meses
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="panel panel-purple">
+        <div class="row">
+          <div class="col-md-4 align-self-center">
+            <span class="circulo">{{ EfectividadOrdenes }}%</span>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-12"><h6>Efectividad de Órdenes</h6></div>
+              <div class="col-md-12">
+                {{ EfectividadOrdenesUltimos3 }}% Prom. Últimos 3 meses
+              </div>
+              <div class="col-md-12">
+                {{ OrdenesNoCompletadas }} OT No Completadas
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+       <div class="panel panel-blue">
+        <div class="row">
+          <div class="col-md-4 align-self-center">
+            <span class="circulo">{{ TiempoInstalacionOrdenes }} Min</span>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-12"><h6>Tiempo de Instalacion de Órdenes</h6></div>
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-12">
+                {{ TiempoInstalacionOrdenesUltimos3 }} Min Prom. Últimos 3 meses
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>     
+    </div>
+    <div class="col-sm-6 col-lg-3">
+       <div class="panel panel-purple">
+        <div class="row">
+          <div class="col-md-4 align-self-center">
+            <span class="circulo">{{ OrdenesPendientes }}</span>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-12"><h6>Órdenes Pendientes</h6></div>
+              <div class="col-md-12">&nbsp;</div>
+            </div>
+          </div>
+        </div>
+        </div>     
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="row">
+  <div class="col-md-6 graficas" align-self-center>
+    <div class="graficas">
+      <div id="chartdiv3"></div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="graficas">
+      <div id="chartdiv"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="graficas">
+      <div id="chartdiv2"></div>
+    </div>
+  </div>
+</div> -->
+
+
+<mat-grid-list cols="2" rowHeight="500px">
+  <mat-grid-tile [rowspan]="2">
+    <div id="chartdiv3"></div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div id="chartdiv"></div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div id="chartdiv2"></div>
+  </mat-grid-tile>
+</mat-grid-list>
